@@ -8,6 +8,7 @@ resource "random_string" "string" {
     special = false
 }
 resource "azurerm_storage_account" "storage" {
+    depends_on = [ azurerm_resource_group.rg1 ]
     name = "my-${random_string.string.id}"
     location = var.location
     resource_group_name = var.resource_group_name
@@ -17,4 +18,7 @@ resource "azurerm_storage_account" "storage" {
 resource "azurerm_storage_container" "blob" {
     name = var.container_name
     storage_account_name = azurerm_storage_account.storage.name
+}
+output "account_name" {
+    value = azurerm_storage_account.storage.name
 }
